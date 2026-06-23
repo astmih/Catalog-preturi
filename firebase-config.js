@@ -1,11 +1,10 @@
-// Completează cu datele din Firebase Console → Project Settings → Your apps
 const firebaseConfig = {
-  apiKey:            "INLOCUIESTE_CU_API_KEY",
-  authDomain:        "INLOCUIESTE_CU_AUTH_DOMAIN",
-  projectId:         "INLOCUIESTE_CU_PROJECT_ID",
-  storageBucket:     "INLOCUIESTE_CU_STORAGE_BUCKET",
-  messagingSenderId: "INLOCUIESTE_CU_MESSAGING_SENDER_ID",
-  appId:             "INLOCUIESTE_CU_APP_ID",
+  apiKey:            "AIzaSyDODicpp7z0fEmI0JcIXbIqL98CR2WgEH4",
+  authDomain:        "catalog-produse-3aa55.firebaseapp.com",
+  projectId:         "catalog-produse-3aa55",
+  storageBucket:     "catalog-produse-3aa55.firebasestorage.app",
+  messagingSenderId: "211382345881",
+  appId:             "1:211382345881:web:b9bdd828873ebbe75e1808",
 };
 
 firebase.initializeApp(firebaseConfig);
