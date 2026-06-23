@@ -4,36 +4,38 @@ let currentCategory  = 'all';
 let loadedProducts   = []; // produse încărcate din Firebase sau products.js
 
 /* ── ÎNCĂRCARE PRODUSE ── */
+function sortProducts(list) {
+  return list.sort((a, b) => {
+    const catDiff = (a.category || '').localeCompare(b.category || '', 'ro');
+    return catDiff !== 0 ? catDiff : (a.name || '').localeCompare(b.name || '', 'ro');
+  });
+}
+
 function initProducts(list) {
-  loadedProducts = list;
-  const CATEGORIES = ['all', ...new Set(list.map(p => p.category))];
+  loadedProducts = sortProducts(list);
+  const CATEGORIES = ['all', ...new Set(loadedProducts.map(p => p.category))];
   buildCatTabs(CATEGORIES);
   renderTable();
 }
 
-// Încearcă Firebase; dacă nu merge, folosește products.js
 function loadProducts() {
-  try {
-    db.collection('catalog_products')
-      .onSnapshot(snap => {
-        if (!snap.empty) {
-          const sorted = snap.docs
-            .map(d => ({ ...d.data() }))
-            .sort((a, b) => {
-              const catDiff = (a.category || '').localeCompare(b.category || '', 'ro');
-              return catDiff !== 0 ? catDiff : (a.name || '').localeCompare(b.name || '', 'ro');
-            });
-          initProducts(sorted);
-        } else {
-          // Firebase gol → folosim products.js
-          initProducts(PRODUCTS);
-        }
-      }, () => {
+  // Citire inițială imediată
+  db.collection('catalog_products').get()
+    .then(snap => {
+      if (!snap.empty) {
+        initProducts(snap.docs.map(d => ({ ...d.data() })));
+      } else {
         initProducts(PRODUCTS);
-      });
-  } catch (e) {
-    initProducts(PRODUCTS);
-  }
+      }
+    })
+    .catch(() => initProducts(PRODUCTS));
+
+  // Listener real-time pentru actualizări din admin
+  db.collection('catalog_products').onSnapshot(snap => {
+    if (!snap.empty) {
+      initProducts(snap.docs.map(d => ({ ...d.data() })));
+    }
+  }, err => console.error('Snapshot error:', err));
 }
 
 /* ── UTILS ── */
