@@ -227,6 +227,11 @@ function clearSearch() {
   renderTable();
 }
 
+function resetDiscounts() {
+  productDiscounts = {};
+  renderTable();
+}
+
 function resetAll() {
   globalDiscount   = 0;
   productDiscounts = {};
