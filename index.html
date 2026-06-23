@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mars Romania — Catalog Prețuri 2026</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Mars Romania — Catalog Prețuri 2026</h1>
+        <p class="subtitle">Prețuri cu TVA 21% inclus · Calculator discount · Uz intern</p>
+      </div>
+      <div class="prod-total-badge" id="headerBadge"></div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- BARA DISCOUNT GLOBAL -->
+    <div class="global-bar">
+      <div class="global-bar-inner">
+        <label class="global-label">Discount global aplicat tuturor produselor</label>
+        <div class="global-controls">
+          <input type="range" id="globalSlider" class="discount-slider" min="0" max="36" step="1" value="0" oninput="onGlobalSlider()" />
+          <div class="global-input-wrap">
+            <input type="number" id="globalInput" class="global-input" min="0" max="36" step="1" value="0" oninput="onGlobalInput()" />
+            <span class="pct-sign">%</span>
+          </div>
+          <button class="btn-reset" onclick="resetAll()">Resetează tot</button>
+        </div>
+        <div class="global-summary" id="globalSummary"></div>
+      </div>
+    </div>
+
+    <!-- FILTRE CATEGORII -->
+    <div class="cat-tabs" id="catTabs"></div>
+
+    <!-- CĂUTARE -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Caută după cod sau nume produs..." oninput="filterProducts()" />
+      </div>
+      <div class="count-badge" id="countBadge"></div>
+    </div>
+
+    <!-- TABEL PRODUSE -->
+    <div class="table-wrap">
+      <table id="productsTable">
+        <thead>
+          <tr>
+            <th class="col-code">Cod Aquila</th>
+            <th class="col-name">Produs</th>
+            <th class="col-buc">Buc/Cutie</th>
+            <th class="col-price">Preț listă cu TVA</th>
+            <th class="col-vat">TVA inclus</th>
+            <th class="col-discount">Discount %</th>
+            <th class="col-final">Preț final cu TVA</th>
+            <th class="col-save">Economie</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        Niciun produs găsit pentru căutarea ta.
+      </div>
+    </div>
+
+    <!-- SUMAR TOTAL -->
+    <div class="total-bar" id="totalBar" style="display:none;">
+      <div class="total-inner">
+        <span class="total-label">Economie totală pe selecție:</span>
+        <span class="total-val" id="totalVal"></span>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

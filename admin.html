@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Catalog Prețuri Mars</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-page">
+
+  <!-- LOGIN -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <h2>Panou Admin</h2>
+      <p>Catalog Prețuri Mars Romania</p>
+      <input type="text"     id="loginUser"  class="login-input" placeholder="Utilizator" autocomplete="username" />
+      <input type="password" id="loginPass"  class="login-input" placeholder="Parolă"    autocomplete="current-password" />
+      <button class="login-btn" onclick="doLogin()">Intră</button>
+      <p class="login-error" id="loginError">Utilizator sau parolă incorectă.</p>
+    </div>
+  </div>
+
+  <!-- ADMIN UI -->
+  <div id="adminUI" style="display:none;">
+
+    <div class="admin-header-bar">
+      <span class="admin-bar-title">Admin — Catalog Prețuri Mars 2026</span>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span id="loggedInAs" style="font-size:0.88rem;color:var(--gray-500);"></span>
+        <a href="index.html" style="font-size:0.85rem;color:var(--blue);">← Vezi catalogul</a>
+        <a href="#" onclick="doLogout()" style="font-size:0.85rem;color:var(--gray-500);">Ieși</a>
+      </div>
+    </div>
+
+    <div id="firebaseDiag" class="firebase-diag"></div>
+
+    <div class="admin-body">
+
+      <!-- STÂNGA: formular adăugare/editare -->
+      <div class="left-col">
+        <div class="form-card">
+          <h3 id="formTitle">Adaugă Produs</h3>
+          <input type="hidden" id="editId" />
+
+          <div class="form-group">
+            <label>Cod Aquila *</label>
+            <input type="text" id="fCode" placeholder="ex: ART_28345" />
+          </div>
+
+          <div class="form-group">
+            <label>Nume produs *</label>
+            <input type="text" id="fName" placeholder="ex: ORBIT Refresher Spearmint HP 17,9g" />
+          </div>
+
+          <div class="form-group">
+            <label>Categorie *</label>
+            <input type="text" id="fCategory" list="categoryList" placeholder="ex: Orbit Refresher" />
+            <datalist id="categoryList"></datalist>
+          </div>
+
+          <div class="form-group">
+            <label>Buc / Cutie</label>
+            <input type="number" id="fBucCutie" placeholder="ex: 30" min="1" />
+          </div>
+
+          <div class="form-group">
+            <label>Preț fără TVA (lei/buc) *</label>
+            <input type="number" id="fPriceNoVAT" placeholder="ex: 3.95" min="0" step="0.01" />
+          </div>
+
+          <div class="form-group">
+            <label>Cotă TVA *</label>
+            <select id="fVatRate">
+              <option value="11">11% — Orbit / Airwaves (gumă)</option>
+              <option value="21" selected>21% — Ciocolată / Bomboane</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Preț cu TVA (lei/buc) — calculat automat</label>
+            <input type="number" id="fPriceWithVAT" placeholder="se calculează automat" min="0" step="0.01" />
+            <small style="color:var(--gray-500);font-size:0.78rem;">Poți modifica manual dacă prețul exact diferă.</small>
+          </div>
+
+          <button class="btn-save" onclick="saveProduct()">Salvează Produsul</button>
+          <button class="btn-cancel-edit" id="btnCancel" onclick="cancelEdit()">Anulează editarea</button>
+        </div>
+
+        <!-- Import date inițiale -->
+        <div class="form-card" style="margin-top:20px;">
+          <h3>Import date inițiale</h3>
+          <p style="font-size:0.85rem;color:var(--gray-500);margin-bottom:14px;">
+            Importă toate produsele din fișierul <code>products.js</code> în Firebase.
+            Folosește o singură dată la configurare inițială.
+          </p>
+          <div id="importStatus" style="font-size:0.85rem;margin-bottom:10px;"></div>
+          <button class="btn-save" style="background:var(--orange);" onclick="importInitialData()">
+            Importă produsele din products.js
+          </button>
+        </div>
+      </div>
+
+      <!-- DREAPTA: lista produse -->
+      <div class="products-list-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h3 style="margin:0;">Produse în catalog</h3>
+          <div class="count-badge" id="adminCount"></div>
+        </div>
+        <input type="text" id="adminSearch" class="search-input"
+               style="border:1.5px solid var(--gray-200);border-radius:8px;padding:8px 12px;width:100%;margin-bottom:14px;"
+               placeholder="Caută produs sau cod..." oninput="filterAdminList()" />
+        <div id="adminList"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="products.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
