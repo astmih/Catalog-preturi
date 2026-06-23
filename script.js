@@ -142,7 +142,7 @@ function renderTable() {
                  value="${escHtml(String(perVal))}"
                  placeholder="${globalDiscount > 0 ? globalDiscount : '0'}"
                  data-code="${escHtml(p.code || '')}"
-                 oninput="onProductDiscount(this)" />
+                 onchange="onProductDiscount(this)" />
           <span class="pct-sign-sm">%</span>
         </div>
         ${disc > 0 ? `<span class="disc-badge">-${disc}%</span>` : ''}
