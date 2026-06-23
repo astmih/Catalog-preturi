@@ -15,11 +15,15 @@ function initProducts(list) {
 function loadProducts() {
   try {
     db.collection('catalog_products')
-      .orderBy('category')
-      .orderBy('name')
       .onSnapshot(snap => {
         if (!snap.empty) {
-          initProducts(snap.docs.map(d => ({ ...d.data() })));
+          const sorted = snap.docs
+            .map(d => ({ ...d.data() }))
+            .sort((a, b) => {
+              const catDiff = (a.category || '').localeCompare(b.category || '', 'ro');
+              return catDiff !== 0 ? catDiff : (a.name || '').localeCompare(b.name || '', 'ro');
+            });
+          initProducts(sorted);
         } else {
           // Firebase gol → folosim products.js
           initProducts(PRODUCTS);

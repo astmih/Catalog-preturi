@@ -62,8 +62,13 @@ async function runDiag() {
 
 /* ── REALTIME LISTENER ── */
 function listenProducts() {
-  db.collection('catalog_products').orderBy('category').orderBy('name').onSnapshot(snap => {
-    allAdminProducts = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  db.collection('catalog_products').onSnapshot(snap => {
+    allAdminProducts = snap.docs
+      .map(d => ({ _id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        const catDiff = (a.category || '').localeCompare(b.category || '', 'ro');
+        return catDiff !== 0 ? catDiff : (a.name || '').localeCompare(b.name || '', 'ro');
+      });
     renderAdminList(allAdminProducts);
     buildCategoryDatalist();
   }, err => console.error(err));
