@@ -43,8 +43,10 @@
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Caută după cod sau nume produs..." oninput="filterProducts()" />
+        <input type="text" id="searchInput" class="search-input" placeholder="Caută după cod sau nume produs..." oninput="onSearch()" />
+        <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
       </div>
+      <a href="catalog-mars-2026.pdf" target="_blank" class="btn-pdf">📄 Catalog PDF</a>
       <div class="count-badge" id="countBadge"></div>
     </div>
 

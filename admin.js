@@ -223,8 +223,26 @@ async function quickUpdatePrice(id, input) {
   const val = parseFloat(input.value);
   if (isNaN(val) || val < 0) return;
   const field = input.dataset.field;
+
+  const updateData = { [field]: val, updatedAt: new Date().toISOString() };
+
+  // Dacă se modifică prețul fără TVA → recalculează automat prețul cu TVA
+  if (field === 'priceNoVAT') {
+    const product = allAdminProducts.find(p => p._id === id);
+    const vatRate = product?.vatRate || 21;
+    const newWithVAT = parseFloat((val * (1 + vatRate / 100)).toFixed(2));
+    updateData.priceWithVAT = newWithVAT;
+
+    // Actualizează și câmpul vizual cu TVA
+    const row = document.getElementById('item-' + id);
+    if (row) {
+      const withVATInput = row.querySelector('[data-field="priceWithVAT"]');
+      if (withVATInput) withVATInput.value = newWithVAT.toFixed(2);
+    }
+  }
+
   try {
-    await db.collection('catalog_products').doc(id).update({ [field]: val, updatedAt: new Date().toISOString() });
+    await db.collection('catalog_products').doc(id).update(updateData);
     showToast('Preț actualizat! ✓');
   } catch (e) {
     showToast('Eroare la salvare.');

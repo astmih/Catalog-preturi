@@ -196,6 +196,41 @@ main {
 
 .search-input::placeholder { color: var(--gray-300); }
 
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: var(--gray-300);
+  color: var(--white);
+  border-radius: 50%;
+  font-size: 0.65rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.search-clear:hover { background: var(--gray-500); }
+
+.btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-pdf:hover { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue); }
+
 .count-badge {
   background: var(--blue-light);
   color: var(--blue);

@@ -209,6 +209,18 @@ function onProductDiscount(input) {
 
 function filterProducts() { renderTable(); }
 
+function onSearch() {
+  const val = document.getElementById('searchInput').value;
+  document.getElementById('searchClear').style.display = val ? 'flex' : 'none';
+  renderTable();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  renderTable();
+}
+
 function resetAll() {
   globalDiscount   = 0;
   productDiscounts = {};
