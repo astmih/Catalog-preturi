@@ -1,6 +1,7 @@
 let globalDiscount    = 0;
 let productDiscounts  = {};
 let productDiscounts2 = {};
+let productLeiValues  = {};
 let currentCategory  = 'all';
 let loadedProducts   = []; // produse încărcate din Firebase sau products.js
 
@@ -137,6 +138,10 @@ function renderTable() {
     const effDisc  = disc2 > 0
       ? Math.round((1 - (1 - disc1 / 100) * (1 - disc2 / 100)) * 1000) / 10
       : disc1;
+    const leiVal   = productLeiValues[p.code] !== undefined ? productLeiValues[p.code] : '';
+    const leiPct   = leiVal !== '' && (p.priceWithVAT || 0) > 0
+      ? Math.round((parseFloat(leiVal) / (p.priceWithVAT || 0)) * 1000) / 10
+      : null;
 
     rows.push(`<tr class="${hasDisc ? 'row-discounted' : ''}">
       <td class="col-code"><span class="code-chip">${escHtml(p.code || '')}</span></td>
@@ -170,6 +175,19 @@ function renderTable() {
           </div>
         </div>
         ${hasDisc ? `<span class="disc-badge">${disc2 > 0 ? `↘ -${effDisc}%` : `-${disc1}%`}</span>` : ''}
+        <div class="disc-lei-row">
+          <span class="disc-lei-sep">sau</span>
+          <div class="disc-input-wrap disc-lei-wrap">
+            <input type="number" class="disc-input" min="0" step="0.01"
+                   value="${escHtml(String(leiVal))}"
+                   placeholder="0"
+                   data-code="${escHtml(p.code || '')}"
+                   data-price="${p.priceWithVAT || 0}"
+                   onchange="onProductLei(this)" />
+            <span class="pct-sign-sm">lei</span>
+          </div>
+          ${leiPct !== null ? `<span class="disc-lei-pct">= ${leiPct}%</span>` : ''}
+        </div>
       </td>
       <td class="col-final">
         <strong class="final-price ${hasDisc ? 'price-red' : ''}">${fmt(final)}</strong>
@@ -228,12 +246,29 @@ function onGlobalInput() {
 function onProductDiscount(input) {
   const code = input.dataset.code;
   const raw  = input.value.trim();
+  delete productLeiValues[code];
   if (raw === '') {
     delete productDiscounts[code];
   } else {
     let val = parseFloat(raw) || 0;
     val = Math.min(36, Math.max(0, val));
     productDiscounts[code] = val;
+  }
+  renderTable();
+}
+
+function onProductLei(input) {
+  const code  = input.dataset.code;
+  const price = parseFloat(input.dataset.price) || 0;
+  const raw   = input.value.trim();
+  if (raw === '' || price === 0) {
+    delete productLeiValues[code];
+    delete productDiscounts[code];
+  } else {
+    const lei = parseFloat(raw) || 0;
+    productLeiValues[code] = lei;
+    const pct = Math.min(100, Math.round((lei / price) * 1000) / 10);
+    productDiscounts[code] = pct;
   }
   renderTable();
 }
@@ -268,6 +303,7 @@ function clearSearch() {
 function resetDiscounts() {
   productDiscounts  = {};
   productDiscounts2 = {};
+  productLeiValues  = {};
   renderTable();
 }
 
@@ -275,6 +311,7 @@ function resetAll() {
   globalDiscount    = 0;
   productDiscounts  = {};
   productDiscounts2 = {};
+  productLeiValues  = {};
   currentCategory  = 'all';
   document.getElementById('globalSlider').value = 0;
   document.getElementById('globalInput').value  = 0;

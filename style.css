@@ -418,6 +418,41 @@ td {
   background: var(--white);
 }
 
+.disc-lei-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--gray-200);
+}
+
+.disc-lei-sep {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-300);
+  flex-shrink: 0;
+}
+
+.disc-lei-wrap {
+  border-color: #BBF7D0;
+  background: var(--green-light);
+}
+
+.disc-lei-wrap:focus-within {
+  border-color: var(--green);
+  background: var(--white);
+}
+
+.disc-lei-pct {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--green);
+  white-space: nowrap;
+}
+
 /* ── PREȚURI FINALE ── */
 .final-price {
   font-family: 'JetBrains Mono', monospace;
