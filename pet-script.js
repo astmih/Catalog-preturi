@@ -1,11 +1,12 @@
+const PET_CATEGORIES = ["CESAR","DREAMIES","FROLIC","KITEKAT","PEDIGREE","PERFECT FIT","SHEBA","WHISKAS"];
+
 let globalDiscount    = 0;
 let productDiscounts  = {};
 let productDiscounts2 = {};
 let productLeiValues  = {};
 let currentCategory  = 'all';
-let loadedProducts   = []; // produse încărcate din Firebase sau products.js
+let loadedProducts   = [];
 
-/* ── ÎNCĂRCARE PRODUSE ── */
 function sortProducts(list) {
   return list.sort((a, b) => {
     const catDiff = (a.category || '').localeCompare(b.category || '', 'ro');
@@ -13,17 +14,14 @@ function sortProducts(list) {
   });
 }
 
-const PET_CATEGORIES = ["CESAR","DREAMIES","FROLIC","KITEKAT","PEDIGREE","PERFECT FIT","SHEBA","WHISKAS"];
-
 function initProducts(list) {
-  loadedProducts = sortProducts(list.filter(p => !PET_CATEGORIES.includes(p.category) && p.group !== 'pet'));
+  loadedProducts = sortProducts(list.filter(p => p.group === 'pet' || PET_CATEGORIES.includes(p.category)));
   const CATEGORIES = ['all', ...new Set(loadedProducts.map(p => p.category))];
   buildCatTabs(CATEGORIES);
   renderTable();
 }
 
 function loadProducts() {
-  // Citire inițială imediată
   db.collection('catalog_products').get()
     .then(snap => {
       if (!snap.empty) {
@@ -34,15 +32,11 @@ function loadProducts() {
     })
     .catch(() => initProducts(PRODUCTS));
 
-  // Listener real-time pentru actualizări din admin
   db.collection('catalog_products').onSnapshot(snap => {
-    if (!snap.empty) {
-      initProducts(snap.docs.map(d => ({ ...d.data() })));
-    }
+    if (!snap.empty) initProducts(snap.docs.map(d => ({ ...d.data() })));
   }, err => console.error('Snapshot error:', err));
 }
 
-/* ── UTILS ── */
 function fmt(n) {
   return n.toFixed(2).replace('.', ',') + ' lei';
 }
@@ -71,7 +65,6 @@ function escHtml(str) {
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── TABURI CATEGORII ── */
 function buildCatTabs(CATEGORIES) {
   const el = document.getElementById('catTabs');
   el.innerHTML = CATEGORIES.map(c => {
@@ -94,7 +87,6 @@ function buildCatTabs(CATEGORIES) {
   });
 }
 
-/* ── RENDER TABEL ── */
 function renderTable() {
   const search = document.getElementById('searchInput').value.trim().toLowerCase();
   const tbody  = document.getElementById('tableBody');
@@ -154,7 +146,7 @@ function renderTable() {
       </td>
       <td class="col-vat">
         <span class="vat-chip">${fmt(vat)}</span>
-        <span class="vat-rate">${p.vatRate || 21}%</span>
+        <span class="vat-rate">${p.vatRate || 11}%</span>
       </td>
       <td class="col-discount">
         <div class="disc-input-wrap">
@@ -228,7 +220,6 @@ function updateSummary(filtered) {
   }
 }
 
-/* ── DISCOUNT HANDLERS ── */
 function onGlobalSlider() {
   const val = parseInt(document.getElementById('globalSlider').value) || 0;
   globalDiscount = val;
@@ -292,8 +283,6 @@ function onProductDiscount2(input) {
   renderTable();
 }
 
-function filterProducts() { renderTable(); }
-
 function onSearch() {
   const val = document.getElementById('searchInput').value;
   document.getElementById('searchClear').style.display = val ? 'flex' : 'none';
@@ -327,5 +316,4 @@ function resetAll() {
   renderTable();
 }
 
-/* ── INIT ── */
 loadProducts();

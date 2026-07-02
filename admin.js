@@ -293,6 +293,7 @@ async function syncProducts() {
       batch.update(ref, {
         name:         p.name,
         category:     p.category,
+        group:        p.group || '',
         bucCutie:     p.bucCutie,
         priceNoVAT:   p.priceNoVAT,
         priceWithVAT: p.priceWithVAT,
@@ -311,6 +312,41 @@ async function syncProducts() {
     await batch.commit();
     statusEl.textContent = `✓ ${updated} produse actualizate, ${added} adăugate nou.`;
     showToast(`Sincronizare completă! ${updated} actualizate.`);
+  } catch (e) {
+    statusEl.textContent = `Eroare: ${e.message}`;
+    console.error(e);
+  }
+}
+
+/* ── RESETEAZĂ PRODUSE PET ── */
+async function resetPetProducts() {
+  const petProducts = PRODUCTS.filter(p => p.group === 'pet');
+  if (!confirm(`Ștergi toate produsele Pet din Firebase și le reimportezi din products.js?\n\n${petProducts.length} produse vor fi resetate.`)) return;
+
+  const statusEl = document.getElementById('importStatus');
+  statusEl.textContent = 'Se șterg produsele Pet vechi...';
+
+  try {
+    // Sterg toate documentele cu group === 'pet' din Firebase
+    const snap = await db.collection('catalog_products').get();
+    const petDocs = snap.docs.filter(d => d.data().group === 'pet' || ['CESAR','DREAMIES','FROLIC','KITEKAT','PEDIGREE','PERFECT FIT','SHEBA','WHISKAS'].includes(d.data().category));
+
+    const deleteBatch = db.batch();
+    petDocs.forEach(d => deleteBatch.delete(d.ref));
+    await deleteBatch.commit();
+    statusEl.textContent = `✓ ${petDocs.length} produse Pet șterse. Se reimportează...`;
+
+    // Reimport produse pet noi din products.js
+    let added = 0;
+    const addBatch = db.batch();
+    petProducts.forEach(p => {
+      const ref = db.collection('catalog_products').doc();
+      addBatch.set(ref, { ...p, createdAt: new Date().toISOString() });
+      added++;
+    });
+    await addBatch.commit();
+    statusEl.textContent = `✓ ${petDocs.length} șterse, ${added} produse Pet reimportate cu succes!`;
+    showToast(`Produse Pet resetate! ${added} produse importate.`);
   } catch (e) {
     statusEl.textContent = `Eroare: ${e.message}`;
     console.error(e);

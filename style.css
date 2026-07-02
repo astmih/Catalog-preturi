@@ -248,6 +248,42 @@ main {
 }
 .btn-pdf:hover { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue); }
 
+.btn-pet {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #FFF7ED;
+  border: 1.5px solid #F59E0B;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #92400E;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-pet:hover { background: #FEF3C7; border-color: #D97706; }
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.btn-back:hover { background: var(--blue-light); color: var(--blue); }
+
 .count-badge {
   background: var(--blue-light);
   color: var(--blue);

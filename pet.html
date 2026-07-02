@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mars Romania — Catalog Prețuri 2026</title>
+  <title>Mars Romania — Catalog Pet 2026</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,10 +11,13 @@
   <header>
     <div class="header-inner">
       <div>
-        <h1>Mars Romania — Catalog Prețuri 2026</h1>
-        <p class="subtitle">Prețuri cu TVA 21% inclus · Calculator discount · Uz intern</p>
+        <h1>Mars Romania — Catalog Pet 2026</h1>
+        <p class="subtitle">Produse pentru animale · TVA 11% inclus · Calculator discount · Uz intern</p>
       </div>
-      <div class="prod-total-badge" id="headerBadge"></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="prod-total-badge" id="headerBadge"></div>
+        <a href="index.html" class="btn-back">← Catalog Mars</a>
+      </div>
     </div>
   </header>
 
@@ -36,7 +39,7 @@
       </div>
     </div>
 
-    <!-- FILTRE CATEGORII -->
+    <!-- FILTRE BRANDURI -->
     <div class="cat-tabs" id="catTabs"></div>
 
     <!-- CĂUTARE -->
@@ -47,8 +50,6 @@
         <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
       </div>
       <button class="btn-reset-discounts" onclick="resetDiscounts()">Resetează discounturi</button>
-      <a href="pet.html" class="btn-pet">🐾 Catalog Pet</a>
-      <a href="catalog-mars-2026.pdf" target="_blank" class="btn-pdf">📄 Catalog PDF</a>
       <div class="count-badge" id="countBadge"></div>
     </div>
 
@@ -88,6 +89,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
   <script src="products.js"></script>
-  <script src="script.js"></script>
+  <script src="pet-script.js"></script>
 </body>
 </html>
