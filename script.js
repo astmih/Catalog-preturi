@@ -156,7 +156,7 @@ function renderTable() {
       </td>
       <td class="col-discount">
         <div class="disc-input-wrap">
-          <input type="number" class="disc-input" min="0" max="36" step="1"
+          <input type="number" class="disc-input" min="0" max="36" step="0.01"
                  value="${escHtml(String(perVal))}"
                  placeholder="${globalDiscount > 0 ? globalDiscount : '0'}"
                  data-code="${escHtml(p.code || '')}"
@@ -166,7 +166,7 @@ function renderTable() {
         <div class="disc-cascade-row">
           <span class="disc-cascade-plus">+</span>
           <div class="disc-input-wrap disc2-wrap">
-            <input type="number" class="disc-input" min="0" max="36" step="1"
+            <input type="number" class="disc-input" min="0" max="36" step="0.01"
                    value="${escHtml(String(perVal2))}"
                    placeholder="0"
                    data-code="${escHtml(p.code || '')}"
@@ -235,7 +235,7 @@ function onGlobalSlider() {
 }
 
 function onGlobalInput() {
-  let val = parseInt(document.getElementById('globalInput').value) || 0;
+  let val = parseFloat(document.getElementById('globalInput').value) || 0;
   val = Math.min(36, Math.max(0, val));
   globalDiscount = val;
   document.getElementById('globalSlider').value = val;
