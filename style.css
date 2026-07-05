@@ -26,6 +26,10 @@
   --radius:     10px;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background: var(--gray-100);
@@ -643,11 +647,108 @@ td {
   .global-controls { flex-direction: column; align-items: flex-start; }
   .discount-slider { width: 100%; }
 
-  thead th:nth-child(4) { display: none; }
-  td:nth-child(4)       { display: none; }
+  /* Toolbar: căutarea ia rândul întreg, butoanele trec dedesubt în loc să oblige la swipe */
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .search-wrap {
+    flex: 1 1 100%;
+  }
+  .count-badge {
+    margin-left: auto;
+  }
 
-  td { padding: 10px 10px; font-size: 0.83rem; }
-  thead th { padding: 10px 10px; }
+  /* ── TABEL → CARDURI PE MOBIL (fără scroll orizontal) ── */
+  .table-wrap {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  table, tbody { display: block; width: 100%; }
+  thead { display: none; }
+
+  tr.cat-divider-row {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .cat-divider-row td {
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  tbody tr:not(.cat-divider-row) {
+    display: block;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  tbody tr.row-discounted {
+    border-color: #FDE68A;
+    background: #FFFBEB;
+  }
+
+  td {
+    display: block;
+    padding: 0;
+    font-size: 0.85rem;
+  }
+
+  /* Cod + Produs = antetul cardului */
+  td.col-code {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  td.col-name {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: normal;
+    margin-bottom: 10px;
+  }
+
+  /* Câmpuri simple, afișate ca "etichetă / valoare" */
+  td.col-buc, td.col-price, td.col-vat, td.col-final, td.col-save {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-top: 1px dashed var(--gray-100);
+  }
+  td.col-buc::before, td.col-price::before, td.col-vat::before,
+  td.col-final::before, td.col-save::before {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--gray-500);
+  }
+  td.col-buc::before   { content: "Buc/Cutie"; }
+  td.col-price::before { content: "Preț listă cu TVA"; }
+  td.col-vat::before   { content: "TVA inclus"; }
+  td.col-final::before { content: "Preț final cu TVA"; }
+  td.col-save::before  { content: "Economie"; }
+
+  td.col-discount {
+    padding-top: 10px;
+    border-top: 1px dashed var(--gray-100);
+  }
+  td.col-discount::before {
+    content: "Discount";
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--gray-500);
+  }
 }
 
 @media print {
